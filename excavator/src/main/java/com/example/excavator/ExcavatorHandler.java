@@ -31,6 +31,8 @@ public class ExcavatorHandler {
         int lvl = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.EXCAVATOR.get(), tool);
         if (lvl <= 0) return;
 
+        int size = Math.min(ModNetwork.getSize(player.getUUID()), lvl + 1); // level N allows up to (N+1)x(N+1)
+
         BlockPos origin = event.getPos();
 
         Direction.Axis axis;
@@ -44,7 +46,7 @@ public class ExcavatorHandler {
             axis = Direction.getNearest(look.x, look.y, look.z).getAxis();
         }
 
-        List<BlockPos> targets = ExcavatorArea.compute(level, origin, axis, loc, tool, lvl);
+        List<BlockPos> targets = ExcavatorArea.compute(level, origin, axis, loc, tool, size);
 
         breaking = true;
         try {
