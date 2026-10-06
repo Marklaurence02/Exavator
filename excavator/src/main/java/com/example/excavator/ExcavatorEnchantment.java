@@ -15,17 +15,17 @@ public class ExcavatorEnchantment extends Enchantment {
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        return 5;
     }
 
     @Override
     public int getMinCost(int level) {
-        return 25;
+        return 10 + (level - 1) * 10; // I:10  II:20  III:30  IV:40  V:50
     }
 
     @Override
     public int getMaxCost(int level) {
-        return 75;
+        return getMinCost(level) + 30;
     }
 
     /**
