@@ -34,12 +34,13 @@ public class ExcavatorPreview {
         if (!player.isShiftKeyDown()) return;
 
         ItemStack tool = player.getMainHandItem();
-        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.EXCAVATOR.get(), tool) <= 0) return;
+        int lvl = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.EXCAVATOR.get(), tool);
+        if (lvl <= 0) return;
 
         if (!(mc.hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) return;
 
         List<BlockPos> targets = ExcavatorArea.compute(
-                mc.level, hit.getBlockPos(), hit.getDirection().getAxis(), hit.getLocation(), tool);
+                mc.level, hit.getBlockPos(), hit.getDirection().getAxis(), hit.getLocation(), tool, lvl);
         if (targets.isEmpty()) return;
 
         PoseStack pose = event.getPoseStack();
