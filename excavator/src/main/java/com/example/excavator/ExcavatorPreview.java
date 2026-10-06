@@ -40,7 +40,8 @@ public class ExcavatorPreview {
         if (!(mc.hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) return;
 
         List<BlockPos> targets = ExcavatorArea.compute(
-                mc.level, hit.getBlockPos(), hit.getDirection().getAxis(), hit.getLocation(), tool, lvl);
+                mc.level, hit.getBlockPos(), hit.getDirection().getAxis(), hit.getLocation(), tool,
+                Math.min(ExcavatorClient.selected, lvl + 1));
         if (targets.isEmpty()) return;
 
         PoseStack pose = event.getPoseStack();
