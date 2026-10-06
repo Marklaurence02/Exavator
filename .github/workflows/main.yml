@@ -15,7 +15,8 @@ jobs:
         with:
           gradle-version: 7.4.2
       - run: gradle build --no-daemon
+        working-directory: excavator
       - uses: actions/upload-artifact@v4
         with:
           name: excavator-jar
-          path: build/libs/*.jar
+          path: excavator/build/libs/*.jar
