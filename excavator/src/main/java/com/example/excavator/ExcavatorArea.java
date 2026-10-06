@@ -15,12 +15,13 @@ import net.minecraft.world.phys.Vec3;
 public class ExcavatorArea {
 
     /**
-     * Returns the blocks in the 4x4 area that would be mined. The origin is always first
+     * Returns the blocks in the (2*level)x(2*level) area that would be mined. The origin is always first
      * (if it is pickaxe-mineable); an empty list means nothing should happen.
      *
      * @param hitLoc exact point hit on the block, or null to use a centered grid
      */
-    public static List<BlockPos> compute(Level level, BlockPos origin, Direction.Axis axis, Vec3 hitLoc, ItemStack tool) {
+    public static List<BlockPos> compute(Level level, BlockPos origin, Direction.Axis axis, Vec3 hitLoc, ItemStack tool, int enchantLevel) {
+        int size = Math.max(1, enchantLevel) * 2; // I=2x2 ... V=10x10
         List<BlockPos> result = new ArrayList<>();
         if (!level.getBlockState(origin).is(BlockTags.MINEABLE_WITH_PICKAXE)) return result;
         result.add(origin);
@@ -36,12 +37,14 @@ public class ExcavatorArea {
             fv = frac(hitLoc, origin, Direction.Axis.values()[others[1]]);
         }
 
-        // The mined block sits in the central 2x2, biased toward where you are aiming.
-        int uStart = fu < 0.5 ? -2 : -1;
-        int vStart = fv < 0.5 ? -2 : -1;
+        // Even-sized grid has no single center: the mined block sits in the middle 2x2,
+        // biased toward where you are aiming.
+        int half = size / 2;
+        int uStart = fu < 0.5 ? -half : -half + 1;
+        int vStart = fv < 0.5 ? -half : -half + 1;
 
-        for (int du = uStart; du < uStart + 4; du++) {
-            for (int dv = vStart; dv < vStart + 4; dv++) {
+        for (int du = uStart; du < uStart + size; du++) {
+            for (int dv = vStart; dv < vStart + size; dv++) {
                 int[] off = new int[3];
                 off[others[0]] = du;
                 off[others[1]] = dv;
