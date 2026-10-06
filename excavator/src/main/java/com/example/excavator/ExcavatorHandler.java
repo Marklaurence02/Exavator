@@ -28,7 +28,8 @@ public class ExcavatorHandler {
         if (!player.isShiftKeyDown()) return; // only while sneaking
 
         ItemStack tool = player.getMainHandItem();
-        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.EXCAVATOR.get(), tool) <= 0) return;
+        int lvl = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.EXCAVATOR.get(), tool);
+        if (lvl <= 0) return;
 
         BlockPos origin = event.getPos();
 
@@ -43,7 +44,7 @@ public class ExcavatorHandler {
             axis = Direction.getNearest(look.x, look.y, look.z).getAxis();
         }
 
-        List<BlockPos> targets = ExcavatorArea.compute(level, origin, axis, loc, tool);
+        List<BlockPos> targets = ExcavatorArea.compute(level, origin, axis, loc, tool, lvl);
 
         breaking = true;
         try {
